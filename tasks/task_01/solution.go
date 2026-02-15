@@ -1,5 +1,12 @@
 package main
 
+import "fmt"
+
 func greet(name string) string {
-	// TODO
+	if name == "" {
+		return "Hello, World!"
+	} else {
+		result := fmt.Sprintf("Hello, %s!", name)
+		return result
+	}
 }
