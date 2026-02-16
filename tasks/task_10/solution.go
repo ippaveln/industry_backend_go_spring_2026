@@ -180,11 +180,12 @@ func (r *InMemoryTaskRepo) Create(title string) (Task, error) {
 }
 
 func (r *InMemoryTaskRepo) Get(id string) (Task, bool) {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
 	task, ok := r.data[id]
 	if !ok {
 		return Task{}, false
 	}
-
 	return task, true
 }
 
