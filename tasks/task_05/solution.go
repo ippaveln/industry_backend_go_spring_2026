@@ -8,13 +8,14 @@ type Cache[K comparable, V any] struct {
 func NewCache[K comparable, V any](capacity int) *Cache[K, V] {
 	return &Cache[K, V]{
 		values: make(map[K]V, capacity),
+		capacity: capacity,
 	}
 }
 
 func (c *Cache[K, V]) Get(key K) (V, bool) {
 	if c.capacity == 0 {
-		var v V
-		return v, false
+		var zero V
+		return zero, false
 	}
 	v, ok := c.values[key]
 	return v, ok
