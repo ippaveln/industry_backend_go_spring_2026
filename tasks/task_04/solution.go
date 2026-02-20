@@ -1,9 +1,33 @@
 package main
 
 type Stats struct {
-	// TODO: define the struct
+	Count int
+	Sum   int64
+	Min   int64
+	Max   int64
 }
 
 func Calc(nums []int64) Stats {
-	// TODO
+	if len(nums) == 0 {
+		return Stats{}
+	}
+
+	stats := Stats{
+		Count: len(nums),
+		Sum:   nums[0],
+		Min:   nums[0],
+		Max:   nums[0],
+	}
+
+	for _, num := range nums[1:] {
+		stats.Sum += num
+		if num < stats.Min {
+			stats.Min = num
+		}
+		if num > stats.Max {
+			stats.Max = num
+		}
+	}
+
+	return stats
 }
