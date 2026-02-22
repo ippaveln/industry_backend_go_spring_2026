@@ -1,4 +1,5 @@
 package main
+
 type Cache[K comparable, V any] struct {
 	data map[K]V
 	cap  int
@@ -25,5 +26,8 @@ func (c *Cache[K, V]) Get(key K) (V, bool) {
 }
 
 func (c *Cache[K, V]) Set(key K, val V) {
+	if c.cap == 0 {
+		return
+	}
 	c.data[key] = val
 }
