@@ -11,6 +11,8 @@ type job[T any] struct {
 	data T
 }
 
+var ErrInvalidWorkers = errors.New("invalid number of workers")
+
 func ParallelMap[T any, R any](
 	ctx context.Context,
 	workers int,
@@ -20,7 +22,7 @@ func ParallelMap[T any, R any](
 	out := make([]R, len(in))
 
 	if workers <= 0 {
-		return out, errors.New("invalid number of workers")
+		return out, ErrInvalidWorkers
 	}
 	if len(in) == 0 {
 		return out, nil
@@ -31,7 +33,7 @@ func ParallelMap[T any, R any](
 
 	var wg sync.WaitGroup
 	wg.Add(workers)
-	jobs := make(chan job[T], len(in))
+	jobs := make(chan job[T], workers)
 
 	go func() {
 		defer close(jobs)
