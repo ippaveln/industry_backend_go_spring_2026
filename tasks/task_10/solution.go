@@ -75,7 +75,6 @@ func (m *inMemoryTaskRepo) List() []Task {
 	defer m.mu.RUnlock()
 
 	tasks := make([]Task, 0, len(m.tasks))
-
 	for _, v := range m.tasks {
 		tasks = append(tasks, v)
 	}
@@ -84,7 +83,7 @@ func (m *inMemoryTaskRepo) List() []Task {
 		if n := b.UpdatedAt.Compare(a.UpdatedAt); n != 0 {
 			return n
 		}
-		// Сравнение ID как чисел, чтобы "10" > "2"
+
 		idA, _ := strconv.Atoi(a.ID)
 		idB, _ := strconv.Atoi(b.ID)
 		return idA - idB
@@ -154,7 +153,7 @@ func (h *taskHandler) create(w http.ResponseWriter, r *http.Request) {
 
 	task, err := h.repo.Create(title)
 	if err != nil {
-		http.Error(w, "error creating task", http.StatusInternalServerError)
+		http.Error(w, "failed to create task", http.StatusInternalServerError)
 		return
 	}
 
