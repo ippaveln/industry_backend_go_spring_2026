@@ -1,5 +1,23 @@
 package main
 
+import (
+	"errors"
+	"strconv"
+)
+
+var fizzError = errors.New("")
+
 func fizzBuzz(n int) (string, error) {
-	// TODO
+	if n < 0 {
+		return "", fizzError
+	}
+	if n%3 == 0 && n%5 == 0 {
+		return "FizzBuzz", nil
+	} else if n%3 == 0 {
+		return "Fizz", nil
+	} else if n%5 == 0 {
+		return "Buzz", nil
+	} else {
+		return strconv.Itoa(n), nil
+	}
 }
