@@ -1,5 +1,9 @@
 package main
 
-// func greet() string {
-// TODO: implement the function to return "Hello, World!"
-// }
+import (
+	_ "fmt"
+)
+
+func greet() string {
+	return "Hello, World!"
+}
