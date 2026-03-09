@@ -24,6 +24,13 @@ type TaskRepo interface {
 	SetDone(id string, done bool) (Task, error)
 }
 
+type Task struct {
+	ID        string
+	Title     string
+	Done      bool
+	UpdatedAt time.Time
+}
+
 type errorDTO struct {
 	Error string `json:"error"`
 }
@@ -178,6 +185,17 @@ func writeError(writer http.ResponseWriter, message string, status int) {
 	}
 }
 
+func generateUUID() (string, error) {
+	b := make([]byte, 16)
+
+	_, err := rand.Read(b)
+	if err != nil {
+		return "", err
+	}
+
+	return fmt.Sprintf("%x-%x-%x-%x-%x", b[0:4], b[4:6], b[6:8], b[8:10], b[10:]), nil
+}
+
 type TaskRepoImpl struct {
 	mutex     sync.RWMutex
 	valuesMap map[string]*Task
@@ -263,22 +281,4 @@ func (t *TaskRepoImpl) SetDone(id string, done bool) (Task, error) {
 	val.UpdatedAt = currTime
 
 	return *val, nil
-}
-
-type Task struct {
-	ID        string
-	Title     string
-	Done      bool
-	UpdatedAt time.Time
-}
-
-func generateUUID() (string, error) {
-	b := make([]byte, 16)
-
-	_, err := rand.Read(b)
-	if err != nil {
-		return "", err
-	}
-
-	return fmt.Sprintf("%x-%x-%x-%x-%x", b[0:4], b[4:6], b[6:8], b[8:10], b[10:]), nil
 }
