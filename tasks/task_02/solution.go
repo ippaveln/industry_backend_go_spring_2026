@@ -1,5 +1,14 @@
 package main
 
+import "slices"
+
 func reverseRunes(s string) string {
-	// TODO
+	if s == "" {
+		return s
+	}
+
+	runes := []rune(s)
+	slices.Reverse(runes)
+	
+	return string(runes)
 }
