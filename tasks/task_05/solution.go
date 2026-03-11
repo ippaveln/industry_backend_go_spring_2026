@@ -1,3 +1,33 @@
 package main
 
-// TODO
+type Cache[K comparable, V any] struct {
+	data     map[K]V
+	capacity int
+}
+
+func NewCache[K comparable, V any](capacity int) *Cache[K, V] {
+	if capacity < 0 {
+		capacity = 0
+	}
+	return &Cache[K, V]{
+		data:     make(map[K]V, capacity),
+		capacity: capacity,
+	}
+}
+
+func (c *Cache[K, V]) Set(key K, value V) {
+	if c.capacity == 0 {
+		return
+	}
+	c.data[key] = value
+}
+
+func (c *Cache[K, V]) Get(key K) (V, bool) {
+	if c.capacity == 0 {
+		var zero V
+		return zero, false
+	}
+
+	val, ok := c.data[key]
+	return val, ok
+}
