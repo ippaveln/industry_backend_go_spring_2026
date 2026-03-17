@@ -15,17 +15,17 @@ func ParallelMap[T any, R any](
 	if workers <= 0 {
 		return nil, errors.New("workers must be positive")
 	}
-
 	if len(in) == 0 {
 		return []R{}, nil
 	}
-
 	if err := parentCtx.Err(); err != nil {
 		return nil, err
 	}
 
 	ctx, cancel := context.WithCancel(parentCtx)
 	defer cancel()
+
+	stop := make(chan struct{})
 
 	type job struct {
 		idx int
@@ -47,6 +47,8 @@ func ParallelMap[T any, R any](
 			defer wg.Done()
 			for {
 				select {
+				case <-stop:
+					return
 				case <-ctx.Done():
 					return
 				case job, ok := <-jobs:
@@ -85,6 +87,7 @@ waitAndCollect:
 		if res.err != nil {
 			once.Do(func() {
 				firstErr = res.err
+				close(stop)
 				cancel()
 			})
 		}
