@@ -1,5 +1,8 @@
 package main
 
 func greet(name string) string {
-	// TODO
+	if name == "" {
+		return "Hello, World!"
+	}
+	return "Hello, " + name + "!"
 }
